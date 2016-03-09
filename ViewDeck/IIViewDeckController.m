@@ -955,10 +955,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 #pragma mark - Rotation IOS6
 
 - (BOOL)shouldAutorotate {
-    _preRotationSize = self.referenceBounds.size;
-    _preRotationCenterSize = self.centerView.bounds.size;
-    _willAppearShouldArrangeViewsAfterRotation = self.interfaceOrientation;
-    
     // give other controllers a chance to act on it too
     [self relayRotationMethod:^(UIViewController *controller) {
         [controller shouldAutorotate];
@@ -979,21 +975,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         return [self.centerController preferredInterfaceOrientationForPresentation];
     
     return [super preferredInterfaceOrientationForPresentation];
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    _preRotationSize = self.referenceBounds.size;
-    _preRotationCenterSize = self.centerView.bounds.size;
-    _preRotationIsLandscape = UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation);
-    _willAppearShouldArrangeViewsAfterRotation = interfaceOrientation;
-    
-    // give other controllers a chance to act on it too
-    [self relayRotationMethod:^(UIViewController *controller) {
-        [controller shouldAutorotateToInterfaceOrientation:interfaceOrientation];
-    }];
-
-    return !self.centerController || [self.centerController shouldAutorotateToInterfaceOrientation:interfaceOrientation];
 }
 
 - (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -1034,7 +1015,6 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
 
 }
 
-
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
     [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     [self restoreShadowToSlidingView];
@@ -1043,6 +1023,7 @@ static NSTimeInterval durationToAnimate(CGFloat pointsToAnimate, CGFloat velocit
         _preRotationSize = self.referenceBounds.size;
         _preRotationCenterSize = self.centerView.bounds.size;
         _preRotationIsLandscape = UIInterfaceOrientationIsLandscape(self.interfaceOrientation);
+		_willAppearShouldArrangeViewsAfterRotation = self.interfaceOrientation;
     }
     
     [self relayRotationMethod:^(UIViewController *controller) {
