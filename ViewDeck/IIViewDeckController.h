@@ -2,7 +2,7 @@
 //  IIViewDeckController.h
 //  IIViewDeck
 //
-//  Copyright (C) 2011-2015, ViewDeck
+//  Copyright (C) 2011-2016, ViewDeck
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy of
 //  this software and associated documentation files (the "Software"), to deal in
@@ -10,7 +10,7 @@
 //  use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
 //  of the Software, and to permit persons to whom the Software is furnished to do
 //  so, subject to the following conditions:
-// 
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
 //
@@ -38,38 +38,38 @@
 
 #ifdef __has_feature
 
-    #if __has_feature(objc_arc_weak)
-    #define __ii_weak        __weak
-    #define ii_weak_property weak
-    #elif __has_feature(objc_arc)
-    #define ii_weak_property unsafe_unretained
-    #define __ii_weak __unsafe_unretained
-    #else
-    #define ii_weak_property assign
-    #define __ii_weak
-    #endif
+#if __has_feature(objc_arc_weak)
+#define __ii_weak        __weak
+#define ii_weak_property weak
+#elif __has_feature(objc_arc)
+#define ii_weak_property unsafe_unretained
+#define __ii_weak __unsafe_unretained
+#else
+#define ii_weak_property assign
+#define __ii_weak
+#endif
 
 #else
 
-    #if TARGET_OS_IPHONE && defined(__IPHONE_5_0) && (__IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_5_0) && __clang__ && (__clang_major__ >= 3)
-    #define II_SDK_SUPPORTS_WEAK 1
-    #elif TARGET_OS_MAC && defined(__MAC_10_7) && (MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_7) && __clang__ && (__clang_major__ >= 3)
-    #define II_SDK_SUPPORTS_WEAK 1
-    #else
-    #define II_SDK_SUPPORTS_WEAK 0
-    #endif
+#if TARGET_OS_IPHONE && defined(__IPHONE_5_0) && (__IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_5_0) && __clang__ && (__clang_major__ >= 3)
+#define II_SDK_SUPPORTS_WEAK 1
+#elif TARGET_OS_MAC && defined(__MAC_10_7) && (MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_7) && __clang__ && (__clang_major__ >= 3)
+#define II_SDK_SUPPORTS_WEAK 1
+#else
+#define II_SDK_SUPPORTS_WEAK 0
+#endif
 
-    #if II_SDK_SUPPORTS_WEAK
-    #define __ii_weak        __weak
-    #define ii_weak_property weak
-    #else
-    #if __clang__ && (__clang_major__ >= 3)
-    #define __ii_weak __unsafe_unretained
-    #else
-    #define __ii_weak
-    #endif
-    #define ii_weak_property assign
-    #endif
+#if II_SDK_SUPPORTS_WEAK
+#define __ii_weak        __weak
+#define ii_weak_property weak
+#else
+#if __clang__ && (__clang_major__ >= 3)
+#define __ii_weak __unsafe_unretained
+#else
+#define __ii_weak
+#endif
+#define ii_weak_property assign
+#endif
 
 #endif
 
@@ -82,53 +82,53 @@
 @protocol IIViewDeckControllerDelegate;
 
 typedef NS_ENUM(NSInteger, IIViewDeckSide) {
-    IIViewDeckLeftSide = 1,
-    IIViewDeckRightSide = 2,
-    IIViewDeckTopSide DEPRECATED_ATTRIBUTE = 3,
-    IIViewDeckBottomSide DEPRECATED_ATTRIBUTE = 4,
+	IIViewDeckLeftSide = 1,
+	IIViewDeckRightSide = 2,
+	IIViewDeckTopSide DEPRECATED_ATTRIBUTE = 3,
+	IIViewDeckBottomSide DEPRECATED_ATTRIBUTE = 4,
 };
 
 
 typedef NS_ENUM(NSInteger, IIViewDeckOffsetOrientation) {
-    IIViewDeckHorizontalOrientation = 1,
-    IIViewDeckVerticalOrientation = 2
+	IIViewDeckHorizontalOrientation = 1,
+	IIViewDeckVerticalOrientation = 2
 } II_DEPRECATED_DROP;
 
 
 typedef NS_ENUM(NSInteger, IIViewDeckPanningMode) {
-    IIViewDeckNoPanning,              /// no panning allowed
-    IIViewDeckFullViewPanning,        /// the default: touch anywhere in the center view to drag the center view around
-    IIViewDeckNavigationBarPanning,   /// panning only occurs when you start touching in the navigation bar (when the center controller is a UINavigationController with a visible navigation bar). Otherwise it will behave as IIViewDeckNoPanning.
-    IIViewDeckPanningViewPanning,      /// panning only occurs when you start touching in a UIView set in panningView property
-    IIViewDeckDelegatePanning,         /// allows panning with a delegate
-    IIViewDeckNavigationBarOrOpenCenterPanning,      /// panning occurs when you start touching the navigation bar if the center controller is visible.  If the left or right controller is open, pannning occurs anywhere on the center controller, not just the navbar.
-    IIViewDeckAllViewsPanning,        /// you can pan anywhere in the viewdeck (including sideviews)
+	IIViewDeckNoPanning,              /// no panning allowed
+	IIViewDeckFullViewPanning,        /// the default: touch anywhere in the center view to drag the center view around
+	IIViewDeckNavigationBarPanning,   /// panning only occurs when you start touching in the navigation bar (when the center controller is a UINavigationController with a visible navigation bar). Otherwise it will behave as IIViewDeckNoPanning.
+	IIViewDeckPanningViewPanning,      /// panning only occurs when you start touching in a UIView set in panningView property
+	IIViewDeckDelegatePanning,         /// allows panning with a delegate
+	IIViewDeckNavigationBarOrOpenCenterPanning,      /// panning occurs when you start touching the navigation bar if the center controller is visible.  If the left or right controller is open, pannning occurs anywhere on the center controller, not just the navbar.
+	IIViewDeckAllViewsPanning,        /// you can pan anywhere in the viewdeck (including sideviews)
 };
 
 
 typedef NS_ENUM(NSInteger, IIViewDeckCenterHiddenInteractivity) {
-    IIViewDeckCenterHiddenUserInteractive,         /// the center view stays interactive
-    IIViewDeckCenterHiddenNotUserInteractive,      /// the center view will become nonresponsive to useractions
-    IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose, /// the center view will become nonresponsive to useractions, but will allow the user to tap it so that it closes
-    IIViewDeckCenterHiddenNotUserInteractiveWithTapToCloseBouncing, /// same as IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose, but closes the center view bouncing
+	IIViewDeckCenterHiddenUserInteractive,         /// the center view stays interactive
+	IIViewDeckCenterHiddenNotUserInteractive,      /// the center view will become nonresponsive to useractions
+	IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose, /// the center view will become nonresponsive to useractions, but will allow the user to tap it so that it closes
+	IIViewDeckCenterHiddenNotUserInteractiveWithTapToCloseBouncing, /// same as IIViewDeckCenterHiddenNotUserInteractiveWithTapToClose, but closes the center view bouncing
 };
 
 
 typedef NS_ENUM(NSInteger, IIViewDeckNavigationControllerBehavior) {
-    IIViewDeckNavigationControllerContained,      /// the center navigation controller will act as any other viewcontroller. Pushing and popping view controllers will be contained in the centerview.
-    IIViewDeckNavigationControllerIntegrated      /// the center navigation controller will integrate with the viewdeck.
+	IIViewDeckNavigationControllerContained,      /// the center navigation controller will act as any other viewcontroller. Pushing and popping view controllers will be contained in the centerview.
+	IIViewDeckNavigationControllerIntegrated      /// the center navigation controller will integrate with the viewdeck.
 } II_DEPRECATED_DROP;
 
 
 typedef NS_ENUM(NSInteger, IIViewDeckSizeMode) {
-    IIViewDeckLedgeSizeMode, /// when rotating, the ledge sizes are kept (side views are more/less visible)
-    IIViewDeckViewSizeMode  /// when rotating, the size view sizes are kept (ledges change)
+	IIViewDeckLedgeSizeMode, /// when rotating, the ledge sizes are kept (side views are more/less visible)
+	IIViewDeckViewSizeMode  /// when rotating, the size view sizes are kept (ledges change)
 };
 
 
 typedef NS_ENUM(NSInteger, IIViewDeckDelegateMode) {
-    IIViewDeckDelegateOnly, /// call the delegate only
-    IIViewDeckDelegateAndSubControllers  /// call the delegate and the subcontrollers
+	IIViewDeckDelegateOnly, /// call the delegate only
+	IIViewDeckDelegateAndSubControllers  /// call the delegate and the subcontrollers
 };
 
 
@@ -142,23 +142,23 @@ extern IIViewDeckOffsetOrientation IIViewDeckOffsetOrientationFromIIViewDeckSide
 
 
 @interface IIViewDeckController : UIViewController {
-@private    
-    CGPoint _panOrigin;
-    UInt32 _viewAppeared;
-    BOOL _viewFirstAppeared;
-    UInt32 _sideAppeared[6];
-    CGFloat _ledge[5];
-    UIViewController* _controllers[6];
-    CGFloat _offset, _maxLedge;
-    CGSize _preRotationSize, _preRotationCenterSize;
-    BOOL _preRotationIsLandscape;
-    IIViewDeckOffsetOrientation _offsetOrientation;
-    UIInterfaceOrientation _willAppearShouldArrangeViewsAfterRotation;
-    CGPoint _willAppearOffset;
-    NSMutableArray* _finishTransitionBlocks;
-    int _disabledUserInteractions;
-    BOOL _needsAddPannersIfAllPannersAreInactive;
-    NSMutableSet* _disabledPanClasses;
+@private
+	CGPoint _panOrigin;
+	UInt32 _viewAppeared;
+	BOOL _viewFirstAppeared;
+	UInt32 _sideAppeared[6];
+	CGFloat _ledge[5];
+	UIViewController* _controllers[6];
+	CGFloat _offset, _maxLedge;
+	CGSize _preRotationSize, _preRotationCenterSize;
+	BOOL _preRotationIsLandscape;
+	IIViewDeckOffsetOrientation _offsetOrientation;
+	UIInterfaceOrientation _willAppearShouldArrangeViewsAfterRotation;
+	CGPoint _willAppearOffset;
+	NSMutableArray* _finishTransitionBlocks;
+	int _disabledUserInteractions;
+	BOOL _needsAddPannersIfAllPannersAreInactive;
+	NSMutableSet* _disabledPanClasses;
 }
 
 typedef void (^IIViewDeckControllerBlock) (IIViewDeckController *controller, BOOL success);
@@ -354,11 +354,11 @@ typedef void (^IIViewDeckControllerBounceBlock) (IIViewDeckController *controlle
 @end
 
 
-// category on UIViewController to provide access to the viewDeckController in the 
+// category on UIViewController to provide access to the viewDeckController in the
 // contained viewcontrollers, a la UINavigationController.
-@interface UIViewController (UIViewDeckItem) 
+@interface UIViewController (UIViewDeckItem)
 
-@property(nonatomic,readonly,retain) IIViewDeckController *viewDeckController; 
+@property(nonatomic,readonly,retain) IIViewDeckController *viewDeckController;
 
 @end
 
